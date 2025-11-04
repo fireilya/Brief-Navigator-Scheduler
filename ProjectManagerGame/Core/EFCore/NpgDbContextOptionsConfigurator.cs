@@ -3,9 +3,9 @@ using Microsoft.Extensions.Options;
 
 namespace Core.EFCore;
 
-public class NpgDbContextConfigurator(
+public class NpgDbContextOptionsConfigurator(
     IOptions<DataContextOptions> options
-) : IDbContextConfigurator
+) : IDbContextOptionsConfigurator
 {
     public void Configure(DbContextOptionsBuilder optionsBuilder)
     {

@@ -2,7 +2,7 @@
 
 namespace Core.EFCore;
 
-public interface IDbContextConfigurator
+public interface IDbContextOptionsConfigurator
 {
     void Configure(DbContextOptionsBuilder optionsBuilder);
 }

@@ -7,10 +7,10 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddNpg(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddSingleton<IDbContextConfigurator, NpgDbContextConfigurator>();
+        serviceCollection.AddSingleton<IDbContextOptionsConfigurator, NpgDbContextOptionsConfigurator>();
         serviceCollection.AddOptionsWithValidation<DataContextOptions>()
            .AddDbContextPool<DataContext>((provider, optionsBuilder) =>
-                provider.GetRequiredService<IDbContextConfigurator>().Configure(optionsBuilder)
+                provider.GetRequiredService<IDbContextOptionsConfigurator>().Configure(optionsBuilder)
             );
 
         return serviceCollection;
