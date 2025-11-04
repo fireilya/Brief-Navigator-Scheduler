@@ -20,7 +20,9 @@ public static class ServiceCollectionExtensions
                 (provider, optionsBuilder) =>
                     provider.GetRequiredService<IDbContextOptionsConfigurator>().Configure(optionsBuilder),
                 PoolSize
-            );
+            )
+           .AddSingleton<IDataContextFactory, DataContextFactory>()
+           .AddScoped<IDataContext>(x => x.GetRequiredService<DataContext>());
 
         return serviceCollection;
     }
