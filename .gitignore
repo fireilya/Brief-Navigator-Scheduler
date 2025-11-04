@@ -404,11 +404,8 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 /.idea
+/ProjectManagerGame/.idea
 
 # Git conflicts
 *.orig
 *.cs.orig
-/ProjectManagerGame/.idea/.idea.ProjectManagerGame/.idea/.gitignore
-/ProjectManagerGame/.idea/.idea.ProjectManagerGame/.idea/encodings.xml
-/ProjectManagerGame/.idea/.idea.ProjectManagerGame/.idea/indexLayout.xml
-/ProjectManagerGame/.idea/.idea.ProjectManagerGame/.idea/vcs.xml
