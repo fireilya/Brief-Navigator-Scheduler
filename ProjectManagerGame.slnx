@@ -5,7 +5,7 @@
     <Project Path="Core\EFCore.IntegrationTests\EFCore.IntegrationTests.csproj" Type="Classic C#" />
     <Project Path="Core\EFCore\EFCore.csproj" Type="Classic C#" />
     <Project Path="Core\Logging\Logging.csproj" Type="Classic C#" />
-    <Project Path="Core\Utilities.UnitTestS\Utilities.UnitTests.csproj" Type="Classic C#" />
+    <Project Path="Core\Utilities.UnitTests\Utilities.UnitTests.csproj" Type="Classic C#" />
     <Project Path="Core\Utilities\Utilities.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/TestCore/">
