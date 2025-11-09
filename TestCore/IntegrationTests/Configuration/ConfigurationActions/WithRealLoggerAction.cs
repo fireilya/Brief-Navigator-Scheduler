@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Core.Logging.Configuration;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace TestCore.IntegrationTests.Configuration.ConfigurationActions;
@@ -10,6 +12,8 @@ public class WithRealLoggerAction : IConfigurationAction
 
     public void Invoke(ConfigurationActionContext context)
     {
-        context.ServiceCollection.AddLogging(x => x.AddConsole());
+        context.ServiceCollection
+           .AddLogging(builder => builder.AddConsole())
+           .AddCustomLogger(new ConfigurationManager(), "Development");
     }
 }
