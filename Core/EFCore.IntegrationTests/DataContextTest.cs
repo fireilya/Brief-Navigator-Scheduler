@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using Core.EFCore.IntegrationTests.TestsData;
 using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TestCore.Common;
 using TestCore.IntegrationTests;
@@ -13,7 +14,29 @@ namespace Core.EFCore.IntegrationTests;
 public class DataContextTest : IntegrationTestBase
 {
     [Test]
-    public async Task TestCreateViaDataContextFactory()
+    public async Task TestCreateViaDataContextFactoryWithoutDisposing()
+    {
+        // Arrange
+        var testEntity = Fixture.Build<TestEntity>()
+           .With(x => x.CreatedAtUtc, Fixture.Create<DateTime>().ToUniversalTime)
+           .Create();
+
+        // Act
+        await DataContextFactory.Create().InsertAsync(testEntity);
+
+        // Assert
+        var foundEntity = await DataContextFactory.Create().FindAsync<TestEntity, Guid>(testEntity.Id);
+
+        // Бд теряет точность у DateTime и TimeSpan, этой проверкой я хочу убедиться в том,
+        // что мы достали запись из бд, а не из оперативной памяти
+        foundEntity.Should().NotBeEquivalentTo(testEntity);
+
+        foundEntity.Should()
+           .BeEquivalentTo(testEntity, options => options.WithDateTimeCloseTo().WithTimeSpanCloseTo());
+    }
+
+    [Test]
+    public async Task TestCreateViaDataContextFactoryWithDisposing()
     {
         // Arrange
         var testEntity = Fixture.Build<TestEntity>()
@@ -158,5 +181,52 @@ public class DataContextTest : IntegrationTestBase
         // Assert
         var testEntity = await DataContext.FindAsync<TestEntity, Guid>(Guid.NewGuid());
         testEntity.Should().BeNull();
+    }
+
+    [Test]
+    public async Task TestGetTable()
+    {
+        // Arrange
+        var testEntity = Fixture.Build<TestEntity>()
+           .With(x => x.CreatedAtUtc, Fixture.Create<DateTime>().ToUniversalTime)
+           .Create();
+        await DataContext.InsertAsync(testEntity);
+
+        // Act
+        var foundEntity = await DataContext.GetTable<TestEntity>()
+           .Where(x => x.Name == testEntity.Name)
+           .SingleAsync();
+
+        // Assert
+        foundEntity.Should().NotBeNull();
+        foundEntity.Should()
+           .BeEquivalentTo(testEntity, options => options.WithDateTimeCloseTo().WithTimeSpanCloseTo());
+    }
+
+    [Test]
+    public async Task TestFullUpdate()
+    {
+        // Arrange
+        var testEntity = Fixture.Build<TestEntity>()
+           .With(x => x.CreatedAtUtc, Fixture.Create<DateTime>().ToUniversalTime)
+           .Create();
+        await DataContext.InsertAsync(testEntity);
+        (await DataContextFactory.Create().FindAsync<TestEntity, Guid>(testEntity.Id))
+           .Should()
+           .BeEquivalentTo(testEntity, options => options.WithDateTimeCloseTo().WithTimeSpanCloseTo());
+
+        var updatedEntity = Fixture.Build<TestEntity>()
+           .With(x => x.Id, testEntity.Id)
+           .With(x => x.CreatedAtUtc, Fixture.Create<DateTime>().ToUniversalTime)
+           .Create();
+
+        // Act
+        await DataContextFactory.Create().UpdateAsync(updatedEntity);
+
+        // Assert
+        var foundEntity = await DataContextFactory.Create().FindAsync<TestEntity, Guid>(testEntity.Id);
+        foundEntity.Should().NotBeNull();
+        foundEntity.Should()
+           .BeEquivalentTo(updatedEntity, options => options.WithDateTimeCloseTo().WithTimeSpanCloseTo());
     }
 }
