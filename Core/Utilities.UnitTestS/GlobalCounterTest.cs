@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Core.Utilities;
 using FluentAssertions;
 using TestCore.UnitTests;
 
-namespace Core.UtilitiesTest;
+namespace Core.Utilities.UnitTests;
 
 public class GlobalCounterTest : UnitTestBase
 {

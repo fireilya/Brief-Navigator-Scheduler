@@ -3,7 +3,7 @@
     <Project Path="Core\Common\Common.csproj" Type="Classic C#" />
     <Project Path="Core\Configuration\Configuration.csproj" Type="Classic C#" />
     <Project Path="Core\EFCore\EFCore.csproj" Type="Classic C#" />
-    <Project Path="Core\UtilitiesTest\UtilitiesTest.csproj" Type="Classic C#" />
+    <Project Path="Core\Utilities.UnitTestS\Utilities.UnitTests.csproj" Type="Classic C#" />
     <Project Path="Core\Utilities\Utilities.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/TestCore/">
