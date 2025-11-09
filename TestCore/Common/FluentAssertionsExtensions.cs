@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using FluentAssertions;
+using FluentAssertions.Collections;
 using FluentAssertions.Equivalency;
 
 namespace TestCore.Common;
@@ -23,4 +25,17 @@ public static class FluentAssertionsExtensions
            .BeCloseTo(x.Subject, precision ?? TimeSpan.FromMilliseconds(10))
         )
        .WhenTypeIs<TimeSpan>();
+
+    public static void ContainCollection<TExpectation>(
+        this GenericCollectionAssertions<TExpectation> equivalencyOptions,
+        IEnumerable<TExpectation> expectationCollection,
+        Func<EquivalencyOptions<TExpectation>,
+            EquivalencyOptions<TExpectation>> config
+    )
+    {
+        foreach (var expectation in expectationCollection)
+        {
+            equivalencyOptions.ContainEquivalentOf(expectation, config);
+        }
+    }
 }
