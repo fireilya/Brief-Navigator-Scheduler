@@ -8,8 +8,7 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddDao(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddSingleton<IDbContextModelConfigurator, DbContextModelConfigurator>()
-           .AddTransient<ITestRepository, TestRepository>();
+        serviceCollection.AddSingleton<IDbContextModelConfigurator, DbContextModelConfigurator>();
 
         return serviceCollection;
     }
