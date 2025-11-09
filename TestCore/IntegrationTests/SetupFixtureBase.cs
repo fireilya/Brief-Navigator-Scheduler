@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Core.EFCore;
 using DotNet.Testcontainers.Containers;
 using Microsoft.Extensions.Configuration;
@@ -14,13 +13,11 @@ public abstract class SetupFixtureBase
 {
     public static IntegrationTestConfiguration TestConfiguration { get; private set; } = null!;
 
-    protected abstract Assembly TargetTestingAssembly { get; }
-
     [OneTimeSetUp]
     public async Task OneTimeSetUp()
     {
         var integrationTestConfigurationBuilder = IntegrationTestConfigurationBuilderFactory
-           .Create(TargetTestingAssembly)
+           .Create()
            .CustomizeConfigurationManager(CustomizeConfiguration)
            .CustomizeServiceCollection(CustomizeServiceCollection)
            .WithNullLogger()
