@@ -17,6 +17,7 @@ public class WithPostgresDataBaseAction : IConfigurationAction
             ["DataBaseOptions:ConnectionStringTemplate"] = context.TestContainerBuilder.ConnectionStringTemplate,
             ["DataBaseOptions:Username"] = context.TestContainerBuilder.Username,
             ["DataBaseOptions:Password"] = context.TestContainerBuilder.Password,
+            ["DataBaseOptions:EnableSensitiveDataLogging"] = "true",
         };
         context.ConfigurationManager.AddInMemoryCollection(configurationDictionary);
         context.ServiceCollection.AddNpg();
