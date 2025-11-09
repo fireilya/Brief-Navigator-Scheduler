@@ -20,7 +20,7 @@ public abstract class SetupFixtureBase
            .Create()
            .CustomizeConfigurationManager(CustomizeConfiguration)
            .CustomizeServiceCollection(CustomizeServiceCollection)
-           .WithNullLogger()
+           .WithRealLogger()
            .WithDataBase();
         CustomizeConfigurationBuilder(integrationTestConfigurationBuilder);
 
