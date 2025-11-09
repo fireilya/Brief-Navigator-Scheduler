@@ -1,5 +1,6 @@
 ﻿<Solution>
   <Folder Name="/Core/">
+    <Project Path="Core\Common\Common.csproj" Type="Classic C#" />
     <Project Path="Core\Configuration\Configuration.csproj" Type="Classic C#" />
     <Project Path="Core\EFCore\EFCore.csproj" Type="Classic C#" />
     <Project Path="Core\UtilitiesTest\UtilitiesTest.csproj" Type="Classic C#" />
