@@ -8,6 +8,7 @@
   </Folder>
   <Folder Name="/TestCore/">
     <Project Path="TestCore\Common\Common.csproj" Type="Classic C#" />
+    <Project Path="TestCore\IntegrationTests\IntegrationTests.csproj" Type="Classic C#" />
     <Project Path="TestCore\UnitTests\UnitTests.csproj" Type="Classic C#" />
   </Folder>
   <Project Path="Dao\Dao.csproj" Type="Classic C#" />
