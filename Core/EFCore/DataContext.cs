@@ -10,18 +10,24 @@ using Microsoft.Extensions.Logging;
 
 namespace Core.EFCore;
 
-public class DataContext(
-    IDbContextModelConfigurator modelConfigurator,
-    ILogger<DataContext> logger,
-    DbContextOptions dbContextOptions
-) : DbContext(dbContextOptions), IDataContext
+public class DataContext : DbContext, IDataContext
 {
     private const string CounterKey = "DataContextCounter";
-    private readonly int currentContextNumber = GlobalCounter.GetCountWithIncrement(CounterKey);
+    private readonly IDbContextModelConfigurator modelConfigurator;
+
+    public DataContext(
+        IDbContextModelConfigurator modelConfigurator,
+        ILogger<DataContext> logger,
+        DbContextOptions dbContextOptions
+    ) : base(dbContextOptions)
+    {
+        this.modelConfigurator = modelConfigurator;
+        var number = GlobalCounter.GetCountWithIncrement(CounterKey);
+        logger.LogInformation("Создаём контекст с номером: {number}", number);
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        logger.LogInformation("Context: {contextNumber} Data context model creating", currentContextNumber);
         modelConfigurator.Configure(modelBuilder);
     }
 
@@ -39,25 +45,19 @@ public class DataContext(
     }
 
     public async Task<TEntity?> FindAsync<TEntity, TKey>(TKey primaryKey) where TEntity : class
-    {
-        return await FindAsync<TEntity>(primaryKey);
-    }
+        => await FindAsync<TEntity>(primaryKey);
 
     public async Task<TEntity> ReadAsync<TEntity, TKey>(TKey primaryKey) where TEntity : class
-    {
-        return await FindAsync<TEntity, TKey>(primaryKey) ??
-               throw new EntityNotFoundException(
-                   $"Entity {typeof(TEntity).Name} not found with primary key {primaryKey}"
-               );
-    }
+        => await FindAsync<TEntity, TKey>(primaryKey) ??
+           throw new EntityNotFoundException(
+               $"Entity {typeof(TEntity).Name} not found with primary key {primaryKey}"
+           );
 
     public async Task<TEntity[]> SelectAsync<TEntity, TKey>(
         Expression<Func<TEntity, TKey>> propertyPicker,
         params TKey[] values
     ) where TEntity : class
-    {
-        return await GetTable<TEntity>().WhereContains(propertyPicker, values).ToArrayAsync();
-    }
+        => await GetTable<TEntity>().WhereContains(propertyPicker, values).ToArrayAsync();
 
     public async Task UpdateAsync<TEntity>(TEntity entity) where TEntity : class
     {
@@ -65,16 +65,14 @@ public class DataContext(
         await SaveChangesAsync();
     }
 
-    public async Task UpdatePropertiesAsync<TEntity, TKey>(
+    public Task UpdatePropertiesAsync<TEntity, TKey>(
         Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>> setProperties,
         Expression<Func<TEntity, TKey>> primaryKeyPicker,
         params TKey[] keys
     ) where TEntity : class
-    {
-        await Set<TEntity>()
+        => Set<TEntity>()
            .WhereContains(primaryKeyPicker, keys)
            .ExecuteUpdateAsync(setProperties);
-    }
 
     public async Task DeleteAsync<TEntity>(TEntity entity) where TEntity : class
     {
@@ -82,13 +80,11 @@ public class DataContext(
         await SaveChangesAsync();
     }
 
-    public async Task DeleteAsync<TEntity, TKey>(Expression<Func<TEntity, TKey>> primaryKeyPicker, params TKey[] keys)
+    public Task DeleteAsync<TEntity, TKey>(Expression<Func<TEntity, TKey>> primaryKeyPicker, params TKey[] keys)
         where TEntity : class
-    {
-        await Set<TEntity>()
+        => Set<TEntity>()
            .WhereContains(primaryKeyPicker, keys)
            .ExecuteDeleteAsync();
-    }
 
     public IQueryable<TEntity> GetTable<TEntity>() where TEntity : class => Set<TEntity>().AsNoTracking();
 }
