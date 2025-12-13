@@ -5,12 +5,10 @@ namespace Assets.Scripts.Scheduler.Menu
 {
     public abstract class MenuBase : MonoBehaviour
     {
-        [SerializeField]
-        protected GameObject openedMenuObject;
-        [SerializeField]
-        protected GameObject darkBackground;
-        [SerializeField]
-        protected GameObject closeButton;
+        [Header("Default menu settings")]
+        [SerializeField] protected GameObject openedMenuObject;
+        [SerializeField] protected GameObject darkBackground;
+        [SerializeField] protected GameObject closeButton;
 
         protected virtual bool CanBeOpened => true;
         protected virtual bool CanBeClosed => true;
