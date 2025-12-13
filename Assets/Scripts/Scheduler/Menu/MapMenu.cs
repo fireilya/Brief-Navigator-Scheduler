@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.Scheduler.Menu
@@ -22,25 +21,59 @@ namespace Assets.Scripts.Scheduler.Menu
         void Start()
         {
             if (gardenButton != null)
-            {
-                gardenButton.onClick.AddListener(() => SelectLocation(Location.Garden));
-                selectorGargenLocation.SetActive(true);
-            }
+                gardenButton.onClick.AddListener(() =>
+                {
+                    SelectLocation(Location.Garden);
+                });
             if (greenHousesButton != null)
             {
-                greenHousesButton.onClick.AddListener(() => SelectLocation(Location.Greenhouses));
-                selectorGreenHousesLocation.SetActive(true);
+                greenHousesButton.onClick.AddListener(() =>
+                {
+                    SelectLocation(Location.Greenhouses);
+                });
+
             }
             if (fieldButton != null)
             {
-                fieldButton.onClick.AddListener(() => SelectLocation(Location.Field));
-                selectorFieldLocation.SetActive(true);
+                fieldButton.onClick.AddListener(() =>
+                {
+                    SelectLocation(Location.Field);
+                });
             }
         }
 
-        public void SelectLocation(Location location)
+        private void SelectLocation(Location location)
         {
-            LocationData.location = location;
+            if (location == LocationData.Location)
+            {
+                LocationData.Location = Location.None;
+            }
+            else
+            {
+                UpdateLocationsVisual(location);
+                LocationData.Location = location;
+            }
         }
+
+        private void UpdateLocationsVisual(Location location)
+        {
+            if (LocationData.IsSelected)
+            {
+                DisableLocationSelector(LocationData.Location);
+            }
+            var selector = GetSelector(location);
+            selector.SetActive(true);
+
+        }
+
+        private void DisableLocationSelector(Location location) => GetSelector(location).SetActive(false);
+
+        private GameObject GetSelector(Location location) => location switch
+        {
+            Location.Garden => selectorGargenLocation,
+            Location.Field => selectorFieldLocation,
+            Location.Greenhouses => selectorGreenHousesLocation,
+            _ => null
+        };
     }
 }

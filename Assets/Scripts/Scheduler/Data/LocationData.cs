@@ -5,18 +5,18 @@ namespace Assets.Scripts.Scheduler
 {
     public class LocationData : MonoBehaviour
     {
-        public Location location;
-        public bool IsSelected => location != Location.None;
-        public string Name => location switch
+        public Location Location;
+        public bool IsSelected => Location != Location.None;
+        public string Name => Location switch
         {
             Location.Garden => "Огород",
             Location.Field => "Поле",
             Location.Greenhouses => "Теплицы",
             Location.None => "Не выбрано",
-            _ => $"Неизвестная локация {(int)location}" 
+            _ => $"Неизвестная локация {(int)Location}" 
         };
 
-        private void ResetLocation() => location = Location.None;
+        private void ResetLocation() => Location = Location.None;
         
         void Start()
         {
