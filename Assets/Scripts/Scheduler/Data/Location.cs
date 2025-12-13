@@ -6,7 +6,8 @@ namespace Assets.Scripts.Scheduler
     public enum Location
     {
         None,
-
-
+        Garden,
+        Greenhouses,
+        Field
     }
 }
