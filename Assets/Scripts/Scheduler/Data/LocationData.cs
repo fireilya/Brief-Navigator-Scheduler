@@ -12,6 +12,7 @@ namespace Assets.Scripts.Scheduler
             Location.Garden => "Огород",
             Location.Field => "Поле",
             Location.Greenhouses => "Теплицы",
+            Location.House => "Дом",
             Location.None => "Не выбрано",
             _ => $"Неизвестная локация {(int)Location}" 
         };
