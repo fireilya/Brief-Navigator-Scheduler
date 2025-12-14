@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace Assets.Scripts.Scheduler.Menu
 {
-    public class MapMenu : MonoBehaviour
+    public class MapMenu : MenuBase
     {
         [Header("Data")]
         [SerializeField] private LocationData LocationData;
