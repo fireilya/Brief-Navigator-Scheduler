@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
+using Assets.Scripts.Scheduler.Menu.UI;
+using UnityEngine.UI;
 
 
 namespace Assets.Scripts.Scheduler.Menu
@@ -11,79 +12,25 @@ namespace Assets.Scripts.Scheduler.Menu
         [SerializeField] private LocationData LocationData;
 
         [Header("Location Buttons")]
-        [SerializeField] private Button gardenButton;
-        [SerializeField] private Button greenHousesButton;
-        [SerializeField] private Button fieldButton;
-        [SerializeField] private Button houseButton;
-        [SerializeField] private Button selectorgardenButton;
-        [SerializeField] private Button selectorgreenHousesButton;
-        [SerializeField] private Button selectorfieldButton;
-        [SerializeField] private Button selectorhouseButton;
-
-        [Header("Locations visual")]
-        [SerializeField] private GameObject selectorGargenLocation;
-        [SerializeField] private GameObject selectorGreenHousesLocation;
-        [SerializeField] private GameObject selectorFieldLocation;
-        [SerializeField] private GameObject selectorHouseLocation;
+        [SerializeField] private LocationUI gardenUI;
+        [SerializeField] private LocationUI greenHousesUI;
+        [SerializeField] private LocationUI fieldUI;
+        [SerializeField] private LocationUI houseUI;
 
         [Header("UI Elements")]
         [SerializeField] private TextMeshProUGUI locationText;
 
         void Start()
         {
-                DisableLocationSelector(Location.Garden);
-                DisableLocationSelector(Location.Greenhouses);
-                DisableLocationSelector(Location.Field);
-                DisableLocationSelector(Location.House);
+            DisableLocationSelector(Location.Garden);
+            DisableLocationSelector(Location.Greenhouses);
+            DisableLocationSelector(Location.Field);
+            DisableLocationSelector(Location.House);
 
-            if (gardenButton != null)
-                gardenButton.onClick.AddListener(() =>
-                {
-                    SelectLocation(Location.Garden);
-                });
-            if (greenHousesButton != null)
-            {
-                greenHousesButton.onClick.AddListener(() =>
-                {
-                    SelectLocation(Location.Greenhouses);
-                });
-            }
-            if (fieldButton != null)
-            {
-                fieldButton.onClick.AddListener(() =>
-                {
-                    SelectLocation(Location.Field);
-                });
-            }
-            if (houseButton != null)
-                houseButton.onClick.AddListener(() =>
-                {
-                    SelectLocation(Location.House);
-                });
-            if (selectorgardenButton != null)
-                selectorgardenButton.onClick.AddListener(() =>
-                {
-                    SelectLocation(Location.Garden);
-                });
-            if (selectorgreenHousesButton != null)
-            {
-                selectorgreenHousesButton.onClick.AddListener(() =>
-                {
-                    SelectLocation(Location.Greenhouses);
-                });
-            }
-            if (selectorfieldButton != null)
-            {
-                selectorfieldButton.onClick.AddListener(() =>
-                {
-                    SelectLocation(Location.Field);
-                });
-            }
-            if (selectorhouseButton != null)
-                selectorhouseButton.onClick.AddListener(() =>
-                {
-                    SelectLocation(Location.House);
-                });
+            SetUpLocationUI(Location.Garden, gardenUI);
+            SetUpLocationUI(Location.Greenhouses, greenHousesUI);
+            SetUpLocationUI(Location.Field, fieldUI);
+            SetUpLocationUI(Location.House, houseUI);
 
             UpdateLocationText();
         }
@@ -94,14 +41,13 @@ namespace Assets.Scripts.Scheduler.Menu
             {
                 DisableLocationSelector(LocationData.Location);
                 LocationData.Location = Location.None;
-                UpdateLocationText();
             }
             else
             {
                 UpdateLocationsVisual(location);
                 LocationData.Location = location;
-                UpdateLocationText();
             }
+            UpdateLocationText();
         }
 
         private void UpdateLocationsVisual(Location location)
@@ -123,11 +69,27 @@ namespace Assets.Scripts.Scheduler.Menu
 
         private GameObject GetSelector(Location location) => location switch
         {
-            Location.Garden => selectorGargenLocation,
-            Location.Field => selectorFieldLocation,
-            Location.Greenhouses => selectorGreenHousesLocation,
-            Location.House => selectorHouseLocation,
+            Location.Garden => gardenUI.selectedLocationVisual,
+            Location.Field => fieldUI.selectedLocationVisual,
+            Location.Greenhouses => greenHousesUI.selectedLocationVisual,
+            Location.House => houseUI.selectedLocationVisual,
             _ => null
         };
+
+        private void SetUpLocationUI(Location location, LocationUI locationUI)
+        {
+            if (locationUI.NonSelectedLocationButton != null)
+                locationUI.NonSelectedLocationButton.onClick.AddListener(() =>
+                {
+                    SelectLocation(location);
+                });
+            if (locationUI.SelectedLocationButton != null)
+            {
+                locationUI.SelectedLocationButton.onClick.AddListener(() =>
+                {
+                    SelectLocation(location);
+                });
+            }
+        }
     }
 }
