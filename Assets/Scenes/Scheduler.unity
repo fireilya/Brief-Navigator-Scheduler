@@ -455,7 +455,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2014817914}
         m_TargetAssemblyTypeName: JournalMenu, Assembly-CSharp
-        m_MethodName: CloseJournal
+        m_MethodName: Close
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -709,6 +709,7 @@ RectTransform:
   - {fileID: 20920446}
   - {fileID: 573241643}
   - {fileID: 1933747715}
+  - {fileID: 1488798604}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -805,9 +806,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f43732b773ab08548a34bb21427385ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  openNotebook: {fileID: 707830715}
+  openedMenuObject: {fileID: 0}
   darkBackground: {fileID: 1933747714}
   closeButton: {fileID: 794247045}
+  LocationData: {fileID: 0}
 --- !u!114 &226616650
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -854,7 +856,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 226616649}
         m_TargetAssemblyTypeName: NotebookMenu, Assembly-CSharp
-        m_MethodName: OpenNotebook
+        m_MethodName: Open
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1319,7 +1321,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 226616649}
         m_TargetAssemblyTypeName: NotebookMenu, Assembly-CSharp
-        m_MethodName: CloseNotebook
+        m_MethodName: Close
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1634,6 +1636,55 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 978234413}
   m_CullTransparentMesh: 1
+--- !u!1 &1488798603
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1488798604}
+  - component: {fileID: 1488798605}
+  m_Layer: 5
+  m_Name: LocationData
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1488798604
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1488798603}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 179047839}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1488798605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1488798603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcba34f574a922e49bf07cf0d9aca23d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Location: 0
 --- !u!1 &1730936046
 GameObject:
   m_ObjectHideFlags: 0
@@ -2023,7 +2074,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c290a54c853f0849b820937f74f5cfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  openJournal: {fileID: 1827273697}
+  openedMenuObject: {fileID: 1827273697}
   darkBackground: {fileID: 1933747714}
   closeButton: {fileID: 88457185}
 --- !u!114 &2014817915
@@ -2072,7 +2123,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2014817914}
         m_TargetAssemblyTypeName: JournalMenu, Assembly-CSharp
-        m_MethodName: OpenJournal
+        m_MethodName: Open
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2242,7 +2293,7 @@ Transform:
   m_GameObject: {fileID: 2091508377}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.03, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
