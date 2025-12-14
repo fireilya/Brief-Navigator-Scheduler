@@ -8,6 +8,7 @@ namespace Assets.Scripts.Scheduler
         None,
         Garden,
         Greenhouses,
+        House,
         Field
     }
 }
