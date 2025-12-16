@@ -5,19 +5,19 @@ namespace Assets.Scripts.Scheduler
 {
     public class LocationData : MonoBehaviour
     {
-        public Location Location;
-        public bool IsSelected => Location != Location.None;
-        public string Name => Location switch
+        public LocationType LocationType;
+        public bool IsSelected => LocationType != LocationType.None;
+        public string Name => LocationType switch
         {
-            Location.Garden => "Огород",
-            Location.Field => "Поле",
-            Location.Greenhouses => "Теплицы",
-            Location.House => "Дом",
-            Location.None => "Не выбрано",
-            _ => $"Неизвестная локация {(int)Location}" 
+            LocationType.Garden => "Огород",
+            LocationType.Field => "Поле",
+            LocationType.Greenhouses => "Теплицы",
+            LocationType.House => "Дом",
+            LocationType.None => "Не выбрано",
+            _ => $"Неизвестная локация {(int)LocationType}" 
         };
 
-        private void ResetLocation() => Location = Location.None;
+        private void ResetLocation() => LocationType = LocationType.None;
         
         void Start()
         {

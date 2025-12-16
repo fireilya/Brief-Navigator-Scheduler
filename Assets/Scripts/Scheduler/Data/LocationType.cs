@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Scheduler
 {
-    public enum Location
+    public enum LocationType
     {
         None,
         Garden,
