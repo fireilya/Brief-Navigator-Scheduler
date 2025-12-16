@@ -1,0 +1,3 @@
+[submodule "Packages/com.BNS.domain/Domain"]
+	path = Packages/com.BNS.domain/Domain
+	url = https://github.com/fireilya/Domain
