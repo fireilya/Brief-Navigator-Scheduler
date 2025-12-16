@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using TMPro;
-using Assets.Scripts.Scheduler.Menu.UI;
 using UnityEngine.UI;
 
 
@@ -12,84 +11,51 @@ namespace Assets.Scripts.Scheduler.Menu
         [SerializeField] private LocationData LocationData;
 
         [Header("Location Buttons")]
-        [SerializeField] private LocationUI gardenUI;
-        [SerializeField] private LocationUI greenHousesUI;
-        [SerializeField] private LocationUI fieldUI;
-        [SerializeField] private LocationUI houseUI;
+        [SerializeField] private Button gardenButton;
+        [SerializeField] private Button greenHousesButton;
+        [SerializeField] private Button fieldButton;
+        [SerializeField] private Button houseButton;
 
         [Header("UI Elements")]
         [SerializeField] private TextMeshProUGUI locationText;
 
         void Start()
         {
-            DisableLocationSelector(Location.Garden);
-            DisableLocationSelector(Location.Greenhouses);
-            DisableLocationSelector(Location.Field);
-            DisableLocationSelector(Location.House);
-
-            SetUpLocationUI(Location.Garden, gardenUI);
-            SetUpLocationUI(Location.Greenhouses, greenHousesUI);
-            SetUpLocationUI(Location.Field, fieldUI);
-            SetUpLocationUI(Location.House, houseUI);
+            SetUpLocationUI(LocationType.Garden, gardenButton);
+            SetUpLocationUI(LocationType.Greenhouses, greenHousesButton);
+            SetUpLocationUI(LocationType.Field, fieldButton);
+            SetUpLocationUI(LocationType.House, houseButton);
 
             UpdateLocationText();
         }
 
-        private void SelectLocation(Location location)
+        private void SelectLocation(LocationType location)
         {
-            if (location == LocationData.Location)
-            {
-                DisableLocationSelector(LocationData.Location);
-                LocationData.Location = Location.None;
-            }
-            else
-            {
-                UpdateLocationsVisual(location);
-                LocationData.Location = location;
-            }
-            UpdateLocationText();
-        }
 
-        private void UpdateLocationsVisual(Location location)
-        {
-            if (LocationData.IsSelected)
-            {
-                DisableLocationSelector(LocationData.Location);
-            }
-            ActivateLocationSelector(location);
+            LocationData.LocationType = location;
+            UpdateLocationText();
         }
 
         private void UpdateLocationText()
         {
-            locationText.text = LocationData.Name.ToString();
+            locationText.text = LocationData.Name;
         }
 
-        private void DisableLocationSelector(Location location) => GetSelector(location).SetActive(false);
-        private void ActivateLocationSelector(Location location) => GetSelector(location).SetActive(true);
-
-        private GameObject GetSelector(Location location) => location switch
+        private void SetUpLocationUI(LocationType location, Button locationButton)
         {
-            Location.Garden => gardenUI.selectedLocationVisual,
-            Location.Field => fieldUI.selectedLocationVisual,
-            Location.Greenhouses => greenHousesUI.selectedLocationVisual,
-            Location.House => houseUI.selectedLocationVisual,
-            _ => null
-        };
-
-        private void SetUpLocationUI(Location location, LocationUI locationUI)
-        {
-            if (locationUI.NonSelectedLocationButton != null)
-                locationUI.NonSelectedLocationButton.onClick.AddListener(() =>
+            if (locationButton != null)
+                locationButton.onClick.AddListener(() =>
                 {
                     SelectLocation(location);
                 });
-            if (locationUI.SelectedLocationButton != null)
-            {
-                locationUI.SelectedLocationButton.onClick.AddListener(() =>
-                {
-                    SelectLocation(location);
-                });
-            }
+        }
+
+        void OnDestroy()
+        {
+            gardenButton.onClick.RemoveAllListeners();
+            greenHousesButton.onClick.RemoveAllListeners();
+            fieldButton.onClick.RemoveAllListeners();
+            houseButton.onClick.RemoveAllListeners();
         }
     }
 }
