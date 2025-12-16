@@ -1,7 +1,7 @@
 {
-  "name": "com.BNS.domain",
+  "name": "com.bns.domain",
   "version": "1.0.0",
-  "displayName": "Domain",
+  "displayName": "com.bns.domain",
   "unity": "2024.1",
   "description": "Domain entities library"
 }
