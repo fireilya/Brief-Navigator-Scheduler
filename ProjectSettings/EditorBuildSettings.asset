@@ -6,14 +6,11 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/DataFlowDemo/Brief.unity
-    guid: d25b490ae71fe254280840539af0a99e
+    path: Assets/Scenes/BriefMock.unity
+    guid: 2715bcf59cc6a6a4d973b78dcb929acb
   - enabled: 1
-    path: Assets/Scenes/DataFlowDemo/Navigator.unity
-    guid: 350856b6ae8e6bd42bc7c392cc39394d
-  - enabled: 1
-    path: Assets/Scenes/DataFlowDemo/Scheduler.unity
-    guid: 16e8dd3230b4688449b32168a8397b2c
+    path: Assets/Scenes/NavigatorMock.unity
+    guid: 5d843d276b0d6dc4e903ede1fc0168ea
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

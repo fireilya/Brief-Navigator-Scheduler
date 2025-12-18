@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Domain.FlattenDtos;
 using Domain.Scheduler;
+using Scheduler.Data;
 using UnityEngine;
 
 namespace Shared
@@ -20,13 +21,13 @@ namespace Shared
         {
             _tools = new[]
             {
-                new Tool(Guid.NewGuid(), Guid.NewGuid(), "Лопата", "Tools/Shovel"),
-                new Tool(Guid.NewGuid(), Guid.NewGuid(), "Нож", "Tools/Knife"),
-                new Tool(Guid.NewGuid(), Guid.NewGuid(), "Серп", "Tools/Sickle"),
-                new Tool(Guid.NewGuid(), Guid.NewGuid(), "Ведро", "Tools/Backet"),
-                new Tool(Guid.NewGuid(), Guid.NewGuid(), "Мешок", "Tools/Bag"),
-                new Tool(Guid.NewGuid(), Guid.NewGuid(), "Ящик", "Tools/Box"),
-                new Tool(Guid.NewGuid(), Guid.NewGuid(), "Тачка", "Tools/Wheelbarrow"),
+                new Tool(Guid.NewGuid(), DataContainer.QuestId, "Лопата", "Tools/Shovel"),
+                new Tool(Guid.NewGuid(), DataContainer.QuestId, "Нож", "Tools/Knife"),
+                new Tool(Guid.NewGuid(), DataContainer.QuestId, "Серп", "Tools/Sickle"),
+                new Tool(Guid.NewGuid(), DataContainer.QuestId, "Ведро", "Tools/Backet"),
+                new Tool(Guid.NewGuid(), DataContainer.QuestId, "Мешок", "Tools/Bag"),
+                new Tool(Guid.NewGuid(), DataContainer.QuestId, "Ящик", "Tools/Box"),
+                new Tool(Guid.NewGuid(), DataContainer.QuestId, "Тачка", "Tools/Wheelbarrow"),
             };
             _actionAreas = new[]
             {
@@ -90,7 +91,7 @@ namespace Shared
                                             "Срывать сафлор",
                                             20,
                                             false,
-                                            Guid.NewGuid()),
+                                            null),
                                         new CapacitySubtask(
                                             Guid.NewGuid(),
                                             "Собрать сафлор",
@@ -140,6 +141,8 @@ namespace Shared
                             },
                             new Risk(
                                 Guid.NewGuid(),
+                                "Risks/Rainy",
+                                "It's rainy today",
                                 new Neutralizer(
                                     Guid.NewGuid(),
                                     "Плащ",
@@ -288,9 +291,11 @@ namespace Shared
                             },
                             new Risk(
                                 Guid.NewGuid(),
+                                "Risks/Gravel",
+                                "Gravel is sharp",
                                 new Neutralizer(
                                     Guid.NewGuid(),
-                                    "Гравий",
+                                    "Ботинки",
                                     "Neutralizers/boots"))),
 
                         new Location(
@@ -393,14 +398,19 @@ namespace Shared
                             },
                             new Risk(
                                 Guid.NewGuid(),
+                                "Risks/Sun",
+                                "Sun is so hot!",
                                 new Neutralizer(
                                     Guid.NewGuid(),
                                     "Шляпа",
                                     "Neutralizer/Hat"))),
                     })
             };
+
+            IsInited = true;
         }
 
+        public static bool IsInited { get; private set; } = false;
         public static ActionArea GetActionArea(Guid actionAreaId) =>
             _actionAreas.Single(x => x.Id == actionAreaId);
         
@@ -408,5 +418,7 @@ namespace Shared
         
         public static Tool GetTool(Guid toolId) =>
             _tools.Single(x => x.Id == toolId);
+        
+        public static Tool[] GetAllToolsForQuest(Guid questId) => _tools.Where(x => x.QuestId == questId).ToArray();
     }
 }

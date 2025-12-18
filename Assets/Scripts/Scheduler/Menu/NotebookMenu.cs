@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Scheduler;
 using Assets.Scripts.Scheduler.Menu;
+using Scheduler.Data;
 using UnityEngine;
 
 public class NotebookMenu : MenuBase

@@ -1,7 +1,4 @@
-﻿using UnityEditor;
-using UnityEngine;
-
-namespace Assets.Scripts.Scheduler
+﻿namespace Scheduler.Data
 {
     public enum LocationType
     {
