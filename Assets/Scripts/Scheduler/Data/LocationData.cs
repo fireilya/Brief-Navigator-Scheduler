@@ -1,7 +1,7 @@
-﻿using System.Collections;
+﻿using Assets.Scripts.Scheduler;
 using UnityEngine;
 
-namespace Assets.Scripts.Scheduler
+namespace Scheduler.Data
 {
     public class LocationData : MonoBehaviour
     {

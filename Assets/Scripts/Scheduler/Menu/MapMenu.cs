@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Scheduler.Data;
+using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using Domain.Scheduler;
