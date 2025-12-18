@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using Domain.Scheduler;
 
 
 namespace Assets.Scripts.Scheduler.Menu
