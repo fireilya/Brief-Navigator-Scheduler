@@ -1,8 +1,7 @@
-﻿    using System.Collections;
-    using UnityEngine;
-    using UnityEngine.UI;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
-    namespace Assets.Scripts.Scheduler.Menu
+namespace Scheduler.Menu
     {
         public abstract class MenuBase : MonoBehaviour
         {
@@ -14,7 +13,19 @@
             protected virtual bool CanBeOpened => true;
             protected virtual bool CanBeClosed => true;
 
-            public void Open()
+            void Start()
+            {
+                GetComponent<Button>().onClick.AddListener(Open);
+                closeButton.onClick.AddListener(Close);
+            }
+
+            void OnDestroy()
+            {
+                GetComponent<Button>().onClick.RemoveAllListeners();
+                closeButton.onClick.RemoveAllListeners();
+            }
+
+            public virtual void Open()
             {
                 if (CanBeOpened)
                 {
@@ -24,7 +35,7 @@
                 }
             }
 
-            public void Close()
+            public virtual void Close()
             {
                 if (CanBeClosed)
                 {

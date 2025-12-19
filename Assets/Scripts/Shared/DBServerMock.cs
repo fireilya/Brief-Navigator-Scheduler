@@ -24,7 +24,7 @@ namespace Shared
                 new Tool(Guid.NewGuid(), DataContainer.QuestId, "Лопата", "Tools/Shovel"),
                 new Tool(Guid.NewGuid(), DataContainer.QuestId, "Нож", "Tools/Knife"),
                 new Tool(Guid.NewGuid(), DataContainer.QuestId, "Серп", "Tools/Sickle"),
-                new Tool(Guid.NewGuid(), DataContainer.QuestId, "Ведро", "Tools/Backet"),
+                new Tool(Guid.NewGuid(), DataContainer.QuestId, "Ведро", "Tools/Bucket"),
                 new Tool(Guid.NewGuid(), DataContainer.QuestId, "Мешок", "Tools/Bag"),
                 new Tool(Guid.NewGuid(), DataContainer.QuestId, "Ящик", "Tools/Box"),
                 new Tool(Guid.NewGuid(), DataContainer.QuestId, "Тачка", "Tools/Wheelbarrow"),
@@ -141,12 +141,13 @@ namespace Shared
                             },
                             new Risk(
                                 Guid.NewGuid(),
-                                "Risks/Rainy",
+                                "Risks/Rain",
                                 "It's rainy today",
                                 new Neutralizer(
                                     Guid.NewGuid(),
                                     "Плащ",
-                                    "Neutralizers/plash"))),
+                                    "Equipment/Cape")),
+                            0),
 
                         new Location(
                             Guid.NewGuid(),
@@ -296,7 +297,8 @@ namespace Shared
                                 new Neutralizer(
                                     Guid.NewGuid(),
                                     "Ботинки",
-                                    "Neutralizers/boots"))),
+                                    "Equipment/Boots")),
+                            1),
 
                         new Location(
                             Guid.NewGuid(),
@@ -403,7 +405,8 @@ namespace Shared
                                 new Neutralizer(
                                     Guid.NewGuid(),
                                     "Шляпа",
-                                    "Neutralizer/Hat"))),
+                                    "Equipment/Hat")),
+                            2),
                     })
             };
 

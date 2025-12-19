@@ -1,5 +1,4 @@
-﻿using Assets.Scripts.Scheduler;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Scheduler.Data
 {

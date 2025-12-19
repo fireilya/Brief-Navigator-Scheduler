@@ -1,4 +1,3 @@
-using Assets.Scripts.Scheduler.Menu;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
