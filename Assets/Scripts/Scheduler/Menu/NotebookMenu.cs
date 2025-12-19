@@ -1,11 +1,18 @@
-﻿using Assets.Scripts.Scheduler;
-using Assets.Scripts.Scheduler.Menu;
-using Scheduler.Data;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class NotebookMenu : MenuBase
+namespace Scheduler.Menu
 {
-    [Header("Data")]
-    [SerializeField] private LocationData LocationData;
-    protected override bool CanBeOpened => LocationData.IsSelected;
+    public class NotebookMenu : MenuBase
+    {
+        [Header("Data")]
+        [SerializeField] private MapDataMapper mapper;
+        [SerializeField] private NotebookCanvas notebookCanvas;
+        protected override bool CanBeOpened => mapper.CurrentChosenLocation is not null;
+
+        public override void Open()
+        {
+            base.Open();
+            if (CanBeOpened) notebookCanvas.Init();
+        }
+    }
 }

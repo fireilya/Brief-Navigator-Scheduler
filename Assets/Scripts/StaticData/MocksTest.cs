@@ -2,8 +2,6 @@ using System;
 using System.Linq;
 using Shared;
 using UnityEngine;
-using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class MocksTest : MonoBehaviour

@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using NUnit.Framework;
 using Scheduler.Data;
 using Shared;
@@ -47,6 +49,14 @@ namespace Scheduler.DataFlowMock.BriefMock
         void OnDestroy()
         {
             foreach (var el in _chooseElements) el.Toggle.onValueChanged.RemoveAllListeners();
+            foreach (var location in DataContainer.CurrentActionArea.Locations)
+            {
+                DataContainer.ChosenTasksByLocation[location.Id] = 
+                    location.Tasks
+                        .Where(task => DataContainer.ChosenTasks.Contains(task))
+                        .ToArray();
+                Debug.Log(DataContainer.ChosenTasksByLocation.Count);
+            }
         }
 
         void OnToNavigatorClicked() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
