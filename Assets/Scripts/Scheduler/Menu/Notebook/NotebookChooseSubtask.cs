@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Scheduler.Data;
 using UnityEngine;
@@ -8,23 +9,33 @@ namespace Scheduler.Menu.Notebook
     public class NotebookChooseSubtask : NotebookSubcanvas
     {
         [SerializeField] private SubtaskVariant subtaskVariantPrefab;
-        [SerializeField] private VerticalLayoutGroup verticalLayoutGroup;
+        [SerializeField] private Button backButton;
+        private VerticalLayoutGroup _verticalLayoutGroup;
 
         private List<GameObject> _createdObjects;
 
 
-        public override void Enable(bool isNeedInit)
+        protected override void Awake()
         {
-            gameObject.SetActive(true);
-            if (isNeedInit) Init();
+            _verticalLayoutGroup = GetComponentInChildren<VerticalLayoutGroup>();
         }
 
-        public override void Init()
+        protected virtual void Start()
+        {
+            if (ParentNotebook) backButton.onClick.AddListener(ParentNotebook.Previous);
+        }
+
+        void OnDestroy()
+        {
+            backButton.onClick.RemoveAllListeners();
+        }
+
+        private protected override void Reinit()
         {
             Clear();
             foreach (var subtask in ParentNotebook.SelectedTask.Subtasks)
             {
-                var subtaskVariant = Instantiate(subtaskVariantPrefab, verticalLayoutGroup.transform);
+                var subtaskVariant = Instantiate(subtaskVariantPrefab, _verticalLayoutGroup.transform);
                 subtaskVariant.SubtaskName.text = subtask.Name;
                 subtaskVariant.TaskButton.onClick.AddListener(() =>
                 {

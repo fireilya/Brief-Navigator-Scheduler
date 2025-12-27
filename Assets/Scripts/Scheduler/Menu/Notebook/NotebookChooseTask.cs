@@ -7,21 +7,20 @@ namespace Scheduler.Menu.Notebook
     public class NotebookChooseTask : NotebookSubcanvas
     {
         [SerializeField] private TaskVariant taskVariantPrefab;
-        [SerializeField] private VerticalLayoutGroup verticalLayoutGroup;
+        private VerticalLayoutGroup _verticalLayoutGroup;
 
-        public override void Enable(bool isNeedInit)
+        protected override void Awake()
         {
-            gameObject.SetActive(true);
-            if (isNeedInit) Init();
+            _verticalLayoutGroup = GetComponentInChildren<VerticalLayoutGroup>();
         }
 
-        public override void Init()
+        private protected override void Reinit()
         {
             Clear();
             gameObject.SetActive(true);
             foreach (var task in DataContainer.ChosenTasksByLocation[ParentNotebook.SelectedLocation.Id])
             {
-                var taskVariant = Instantiate(taskVariantPrefab, verticalLayoutGroup.transform);
+                var taskVariant = Instantiate(taskVariantPrefab, _verticalLayoutGroup.transform);
                 taskVariant.TaskName.text = task.Name;
                 taskVariant.TaskButton.onClick.AddListener(() =>
                 {

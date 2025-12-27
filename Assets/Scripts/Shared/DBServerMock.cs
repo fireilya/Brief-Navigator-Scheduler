@@ -11,8 +11,8 @@ namespace Shared
     public static class DBServerMock
     {
         private static ActionArea[] _actionAreas;
-
         private static Tool[] _tools;
+        private static Worker[] _workers;
 
         private static Guid GetToolIdByName(string toolName)
             => _tools.Single(x => x.Name == toolName).Id;
@@ -29,6 +29,13 @@ namespace Shared
                 new Tool(Guid.NewGuid(), DataContainer.QuestId, "Ящик", "Tools/Box"),
                 new Tool(Guid.NewGuid(), DataContainer.QuestId, "Тачка", "Tools/Wheelbarrow"),
             };
+
+            _workers = new[]
+            {
+                new Worker(Guid.NewGuid(), "Фермер", "Workers/Farmer", 1.0),
+                new Worker(Guid.NewGuid(), "Сын фермера", "Workers/FarmerSon", 0.8)
+            };
+
             _actionAreas = new[]
             {
                 new ActionArea(
@@ -54,19 +61,22 @@ namespace Shared
                                             Guid.NewGuid(),
                                             "Срывать кукурузу",
                                             20,
+                                            1,
                                             false,
-                                            null),
+                                            Guid.Empty),
 
                                         new ProcessSubtask(
                                             Guid.NewGuid(),
                                             "Обрывать листья у початков",
                                             30,
+                                            2,
                                             false,
-                                            null),
+                                            Guid.Empty),
                                         new CapacitySubtask(
                                             Guid.NewGuid(),
                                             "Собирать",
                                             10,
+                                            3,
                                             true,
                                             5,
                                             new Dictionary<Guid, short>
@@ -90,12 +100,14 @@ namespace Shared
                                             Guid.NewGuid(),
                                             "Срывать сафлор",
                                             20,
+                                            1,
                                             false,
-                                            null),
+                                            Guid.Empty),
                                         new CapacitySubtask(
                                             Guid.NewGuid(),
                                             "Собрать сафлор",
                                             10,
+                                            2,
                                             true,
                                             30,
                                             new Dictionary<Guid, short>
@@ -120,12 +132,14 @@ namespace Shared
                                             Guid.NewGuid(),
                                             "Срезать вербену",
                                             30,
+                                            1,
                                             false,
                                             GetToolIdByName("Серп")),
                                         new CapacitySubtask(
                                             Guid.NewGuid(),
                                             "Собрать Вербену",
                                             10,
+                                            2,
                                             true,
                                             30,
                                             new Dictionary<Guid, short>
@@ -166,6 +180,7 @@ namespace Shared
                                             Guid.NewGuid(),
                                             "Выкопать картошку",
                                             30,
+                                            1,
                                             false,
                                             GetToolIdByName("Лопата")),
 
@@ -173,13 +188,15 @@ namespace Shared
                                             Guid.NewGuid(),
                                             "Счистить землю",
                                             30,
+                                            2,
                                             false,
-                                            null),
+                                            Guid.Empty),
 
                                         new CapacitySubtask(
                                             Guid.NewGuid(),
                                             "Собирать картошку",
                                             10,
+                                            3,
                                             true,
                                             10,
                                             new Dictionary<Guid, short>
@@ -203,6 +220,7 @@ namespace Shared
                                             Guid.NewGuid(),
                                             "Срезать тыкву",
                                             30,
+                                            1,
                                             false,
                                             GetToolIdByName("Нож")),
 
@@ -210,13 +228,15 @@ namespace Shared
                                             Guid.NewGuid(),
                                             "Оборвать хвостики",
                                             10,
+                                            2,
                                             false,
-                                            null),
+                                            Guid.Empty),
 
                                         new CapacitySubtask(
                                             Guid.NewGuid(),
                                             "Собрать тыквы",
                                             10,
+                                            3,
                                             true,
                                             1,
                                             new Dictionary<Guid, short>
@@ -241,12 +261,14 @@ namespace Shared
                                             Guid.NewGuid(),
                                             "Срезать пшеницу",
                                             30,
+                                            1,
                                             false,
                                             GetToolIdByName("Нож")),
                                         new CapacitySubtask(
                                             Guid.NewGuid(),
                                             "Собрать пшеницу",
                                             10,
+                                            2,
                                             true,
                                             30,
                                             new Dictionary<Guid, short>
@@ -271,12 +293,14 @@ namespace Shared
                                             Guid.NewGuid(),
                                             "Срывать петрушку",
                                             20,
+                                            1,
                                             false,
-                                            null),
+                                            Guid.Empty),
                                         new CapacitySubtask(
                                             Guid.NewGuid(),
                                             "Собрать петрушку",
                                             10,
+                                            2,
                                             true,
                                             30,
                                             new Dictionary<Guid, short>
@@ -317,6 +341,7 @@ namespace Shared
                                             Guid.NewGuid(),
                                             "Срезать томаты",
                                             30,
+                                            1,
                                             false,
                                             GetToolIdByName("Нож")),
 
@@ -324,6 +349,7 @@ namespace Shared
                                             Guid.NewGuid(),
                                             "Собрать томаты",
                                             10,
+                                            2,
                                             true,
                                             10,
                                             new Dictionary<Guid, short>
@@ -347,13 +373,15 @@ namespace Shared
                                             Guid.NewGuid(),
                                             "Срывать укроп",
                                             20,
+                                            1,
                                             false,
-                                            null),
+                                            Guid.Empty),
 
                                         new CapacitySubtask(
                                             Guid.NewGuid(),
                                             "Собрать укроп",
                                             10,
+                                            2,
                                             true,
                                             30,
                                             new Dictionary<Guid, short>
@@ -378,13 +406,15 @@ namespace Shared
                                             Guid.NewGuid(),
                                             "Срывать салат",
                                             20,
+                                            1,
                                             false,
-                                            null),
+                                            Guid.Empty),
 
                                         new CapacitySubtask(
                                             Guid.NewGuid(),
                                             "Собрать салат",
                                             10,
+                                            2,
                                             true,
                                             30,
                                             new Dictionary<Guid, short>
@@ -414,14 +444,26 @@ namespace Shared
         }
 
         public static bool IsInited { get; private set; } = false;
+
         public static ActionArea GetActionArea(Guid actionAreaId) =>
             _actionAreas.Single(x => x.Id == actionAreaId);
-        
+
         public static ActionArea GetFirstActionArea() => _actionAreas.First();
-        
+
         public static Tool GetTool(Guid toolId) =>
             _tools.Single(x => x.Id == toolId);
-        
+
+        public static Worker[] GetAllWorkers() => _workers;
+
+        public static Guid[] GetAllCapacityToolId => new[]
+        {
+            GetToolIdByName("Ведро"),
+            GetToolIdByName("Мешок"),
+            GetToolIdByName("Ящик"),
+            GetToolIdByName("Тачка")
+        };
+
+
         public static Tool[] GetAllToolsForQuest(Guid questId) => _tools.Where(x => x.QuestId == questId).ToArray();
     }
 }

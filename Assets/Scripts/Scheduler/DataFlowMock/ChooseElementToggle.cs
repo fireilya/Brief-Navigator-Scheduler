@@ -12,7 +12,7 @@ namespace Scheduler.DataFlowMock.BriefMock
         void Awake()
         {
             Toggle = GetComponent<Toggle>();
-            if (Toggle is null) throw new NullReferenceException("Ti ahuel blyat");
+            if (Toggle is null) throw new NullReferenceException("Toggle is null");
             ChooseNote = GetComponentInChildren<TMP_Text>();
         }
     }
