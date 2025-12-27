@@ -29,7 +29,7 @@ public class JournalNavigatorMapper : MonoBehaviour
 
         slotIndex = 0;
 
-        foreach (var neutralizer in DataContainer.FoundRisksNeutralizes)
+        foreach (var neutralizer in DataContainer.FoundRisksNeutralizers)
         {
             var cellGameObject = equipmentKit.KitCells[slotIndex++].gameObject;
             var equipment = Instantiate(cellGameObject, cellGameObject.transform).GetComponent<Image>();

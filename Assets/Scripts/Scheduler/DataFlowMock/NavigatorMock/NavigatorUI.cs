@@ -34,8 +34,8 @@ namespace DataFlowDemo.Navigator
                 newChooseElement.ChooseNote.text = location.Risk.Neutralizer.Name;
                 newChooseElement.Toggle.onValueChanged.AddListener(value =>
                 {
-                    if (value) DataContainer.FoundRisksNeutralizes.Add(location.Risk.Neutralizer);
-                    else DataContainer.FoundRisksNeutralizes.Remove(location.Risk.Neutralizer);
+                    if (value) DataContainer.FoundRisksNeutralizers.Add(location.Risk.Neutralizer);
+                    else DataContainer.FoundRisksNeutralizers.Remove(location.Risk.Neutralizer);
                 });
                 _chooseElements.Add(newChooseElement);
 
@@ -65,18 +65,18 @@ namespace DataFlowDemo.Navigator
 
                         var processSubTask = (ProcessSubtask)subtask;
                         
-                        if (processSubTask.NeededToolId is null ||
-                            _processedTools.Contains(processSubTask.NeededToolId.Value)) continue;
+                        if (processSubTask.NeededToolId == Guid.Empty ||
+                            _processedTools.Contains(processSubTask.NeededToolId)) continue;
                         
                         newChooseElement = Instantiate(chooseElementPrefab, gridLayoutGroup.transform);
-                        newChooseElement.ChooseNote.text = DBServerMock.GetTool(processSubTask.NeededToolId.Value).Name;
+                        newChooseElement.ChooseNote.text = DBServerMock.GetTool(processSubTask.NeededToolId).Name;
                         newChooseElement.Toggle.onValueChanged.AddListener(value =>
                         {
-                            if (value) DataContainer.FoundToolsIds.Add(processSubTask.NeededToolId.Value);
-                            else DataContainer.FoundToolsIds.Remove(processSubTask.NeededToolId.Value);
+                            if (value) DataContainer.FoundToolsIds.Add(processSubTask.NeededToolId);
+                            else DataContainer.FoundToolsIds.Remove(processSubTask.NeededToolId);
                         });
                         _chooseElements.Add(newChooseElement);
-                        _processedTools.Add(processSubTask.NeededToolId.Value);
+                        _processedTools.Add(processSubTask.NeededToolId);
                     }
                 }
             }

@@ -10,14 +10,14 @@ namespace Scheduler.Data
         public static ActionArea CurrentActionArea;
         public static List<GameTask> ChosenTasks = new();
         public static HashSet<Guid> FoundToolsIds = new();
-        public static List<Neutralizer> FoundRisksNeutralizes = new();
+        public static List<Neutralizer> FoundRisksNeutralizers = new();
         public static Dictionary<Guid, GameTask[]> ChosenTasksByLocation = new();
 
         public static void Clear()
         {
             ChosenTasks.Clear();
             FoundToolsIds.Clear();
-            FoundRisksNeutralizes.Clear();
+            FoundRisksNeutralizers.Clear();
             ChosenTasksByLocation.Clear();
         }
     }

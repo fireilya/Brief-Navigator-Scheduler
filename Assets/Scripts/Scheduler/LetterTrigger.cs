@@ -1,31 +1,24 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 
 public class LetterTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public GameObject task; 
+    [SerializeField] private Canvas Letter;
 
-    void Start()
+    private void Start()
     {
-        if (task != null)
-        {
-            task.SetActive(false);
-        }
+        Letter.gameObject.SetActive(false);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (task != null)
-        {
-            task.SetActive(true);
-        }
+        Letter.gameObject.SetActive(true);
     }
 
     public void OnPointerExit(PointerEventData eventData)
-    {
-        if (task != null)
-        {
-            task.SetActive(false);
-        }
+    { 
+        Letter.gameObject.SetActive(false);
     }
 }

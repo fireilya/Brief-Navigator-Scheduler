@@ -55,7 +55,6 @@ namespace Scheduler.DataFlowMock.BriefMock
                     location.Tasks
                         .Where(task => DataContainer.ChosenTasks.Contains(task))
                         .ToArray();
-                Debug.Log(DataContainer.ChosenTasksByLocation.Count);
             }
         }
 

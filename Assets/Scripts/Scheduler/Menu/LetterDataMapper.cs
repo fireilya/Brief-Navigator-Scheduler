@@ -1,3 +1,4 @@
+using System;
 using Scheduler.Data;
 using UnityEngine;
 using UnityEngine.UI;
@@ -5,7 +6,13 @@ using UnityEngine.UI;
 public class LetterDataMapper : MonoBehaviour
 {
     [SerializeField] private TaskDescription taskDescriptionPrefab;
-    [SerializeField] private VerticalLayoutGroup verticalLayoutGroup;
+    private VerticalLayoutGroup verticalLayoutGroup;
+
+    private void Awake()
+    {
+        verticalLayoutGroup = GetComponentInChildren<VerticalLayoutGroup>();
+    }
+
     void Start()
     {
         foreach (var task in DataContainer.ChosenTasks) 
