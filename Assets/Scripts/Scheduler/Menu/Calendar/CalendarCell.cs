@@ -1,26 +1,47 @@
-using Domain.Scheduler;
+using System;
 using Scheduler.Bases;
 using Scheduler.Wrappers;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using UnityEngine.Serialization;
-using UnityEngine.UIElements;
 
 namespace Scheduler.Menu.Calendar
 {
     public class CalendarCell : SlotForDraggableBase, IPointerEnterHandler, IPointerExitHandler
     {
-        public int Index { get; set; }
-        public SubtaskWrapper ScheduledSubtask { get; set; }
+        public int Index
+        {
+            get => _index;
+            set
+            {
+                if (_index != -1) throw new Exception("CalendarCell index reassign not allowed!");
+                _index = value;
+            }
+        }
+
+        public ScheduledCellsMark ScheduledByMark
+        {
+            get => _scheduledByMark;
+            set
+            {
+                if (_scheduledByMark) throw new Exception("ScheduledByMark reassign not allowed!");
+                _scheduledByMark = value;
+            }
+        }
+
+        public SubtaskWrapper ScheduledSubtaskWrapper => ScheduledByMark.SubtaskWrapper;
 
         [HideInInspector] public UnityEvent<int, TaskPlane> onTaskPlaneEnter = new();
 
         [HideInInspector] public UnityEvent<int, TaskPlane> onTaskPlaneExit = new();
 
         [HideInInspector] public UnityEvent<int, TaskPlane> onTaskPlaneDropped = new();
+        private int _index = -1;
+        private ScheduledCellsMark _scheduledByMark;
 
-        public bool IsScheduled => ScheduledSubtask != null;
+        public bool IsScheduled => ScheduledByMark;
+
+        public void ResetScheduling() => _scheduledByMark = null;
 
         public override void OnDrop(PointerEventData eventData)
         {

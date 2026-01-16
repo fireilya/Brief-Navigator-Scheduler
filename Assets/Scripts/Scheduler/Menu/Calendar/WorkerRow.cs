@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using Domain.Scheduler;
+using Scheduler.Wrappers;
 using Shared;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
@@ -12,13 +14,19 @@ namespace Scheduler.Menu.Calendar
     public class WorkerRow : MonoBehaviour
     {
         [SerializeField] private CalendarCell cellPrefab;
-        [SerializeField] private ScheduledCellPlane scheduledCellPlanePrefab;
-        public TMP_Text WorkerEfficiency { get; set; }
+        [SerializeField] private ScheduledCellsMark scheduledCellsMarkPrefab;
+
+        [HideInInspector] public UnityEvent<ScheduledCellsMark> onNewCellsScheduled;
+        [HideInInspector] public UnityEvent<ScheduledCellsMark> onCellsUnscheduled;
+        public TMP_Text WorkerEfficiencyText { get; private set; }
+        
         public CalendarCell[] Cells {get; private set;}
         public CalendarWorker CalendarWorker {get; set;}
+
+        public float WorkerEfficiency => CalendarWorker.WorkerData.EfficiencyCoeff;
         
         private HorizontalLayoutGroup _cellsRow;
-        private ScheduledCellPlane prescheduledCellPlane;
+        private ScheduledCellsMark _prescheduledCellsMark;
         private CalendarGrid _parent;
 
         private const float PreschedulePlaneAlpha = 0.5f;
@@ -38,14 +46,14 @@ namespace Scheduler.Menu.Calendar
 
         private void Awake()
         {
-            WorkerEfficiency = GetComponentInChildren<TMP_Text>();
+            WorkerEfficiencyText = GetComponentInChildren<TMP_Text>();
             _cellsRow = GetComponentInChildren<HorizontalLayoutGroup>();
-            prescheduledCellPlane = Instantiate(scheduledCellPlanePrefab, transform);
-            prescheduledCellPlane.ScheduledCellImage.raycastTarget = false;
-            var colorBuf = prescheduledCellPlane.ScheduledCellImage.color;
+            _prescheduledCellsMark = Instantiate(scheduledCellsMarkPrefab, transform);
+            _prescheduledCellsMark.ScheduledCellImage.raycastTarget = false;
+            var colorBuf = _prescheduledCellsMark.ScheduledCellImage.color;
             colorBuf.a = PreschedulePlaneAlpha;
-            prescheduledCellPlane.ScheduledCellImage.color = colorBuf;
-            prescheduledCellPlane.gameObject.SetActive(false);
+            _prescheduledCellsMark.ScheduledCellImage.color = colorBuf;
+            _prescheduledCellsMark.gameObject.SetActive(false);
         }
 
         public void CreateCellsRow(int cellsCount)
@@ -69,52 +77,51 @@ namespace Scheduler.Menu.Calendar
         {
             var workerCell = Cells[0];
             workerCell.enabled = false;
-            CalendarWorker.WorkerImage.sprite = ImageServerMock.LoadImage(CalendarWorker.WorkerData.PathToIcon);
             CalendarWorker.transform.SetParent(workerCell.transform);
             CalendarWorker.RectTransform.sizeDelta = workerCell.RectTransform.sizeDelta;
             CalendarWorker.transform.position = workerCell.transform.position;
-            WorkerEfficiency.SetText(CalendarWorker.WorkerData.EfficiencyCoeff.ToString("F1"));
+            WorkerEfficiencyText.SetText(CalendarWorker.WorkerData.EfficiencyCoeff.ToString("F1"));
         }
 
         private void PrescheduledCell(int cellIndex, TaskPlane plannableTask)
         {
             var cell = Cells[cellIndex];
-            prescheduledCellPlane.gameObject.SetActive(true);
-            prescheduledCellPlane.transform.position = cell.transform.position;
+            _prescheduledCellsMark.gameObject.SetActive(true);
+            _prescheduledCellsMark.transform.position = cell.transform.position;
             var sizeBuf = cell.RectTransform.sizeDelta;
             sizeBuf.x *= plannableTask.ScheduledOnHours;
-            prescheduledCellPlane.RectTransform.sizeDelta = sizeBuf;
+            _prescheduledCellsMark.RectTransform.sizeDelta = sizeBuf;
         }
 
         private void UnPrescheduleCell(int cellIndex, TaskPlane plannableTask)
         {
-            prescheduledCellPlane.gameObject.SetActive(false);
+            _prescheduledCellsMark.gameObject.SetActive(false);
         }
 
         private void ScheduleCell(int cellIndex, TaskPlane schedulingTask)
         {
-            prescheduledCellPlane.gameObject.SetActive(false);
+            _prescheduledCellsMark.gameObject.SetActive(false);
             var cellsToSchedule = new List<CalendarCell>();
             for (var i = 0; i < schedulingTask.ScheduledOnHours; i++)
             {
                 if (cellIndex + i >= Cells.Length)
                 {
-                    Parent.ShowWarning(
-                        $"Ваши работники не будут работать сверхурочно! " +
-                        $"Время выполнения планируемой задачи будет обрезано " +
+                    Parent.ShowWarningWindow(
+                        "Ваши работники не будут работать сверхурочно! " +
+                        "Время выполнения планируемой задачи будет обрезано " +
                         $"с {schedulingTask.ScheduledOnHours} часов до {i}",
-                        () => ScheduleCellsBuf(cellsToSchedule, schedulingTask));
+                        continueCallback: () => ScheduleCellsBuf(cellsToSchedule, schedulingTask));
                     return;
                 }
 
                 if (Cells[cellIndex + i].IsScheduled)
                 {
-                    Parent.ShowWarning(
-                        $"Ваши работники не будут выполнять два дела одновременно! " +
-                        $"Из-за пересечения с задачей \"{Cells[cellIndex + i].ScheduledSubtask.SubtaskName}\" " +
-                        $"время выполнения планируемой задачи будет обрезано " +
+                    Parent.ShowWarningWindow(
+                        "Ваши работники не будут выполнять два дела одновременно! " +
+                        $"Из-за пересечения с задачей \"{Cells[cellIndex + i].ScheduledSubtaskWrapper.SubtaskName}\" " +
+                        "время выполнения планируемой задачи будет обрезано " +
                         $"с {schedulingTask.ScheduledOnHours} часов до {i}",
-                        () => ScheduleCellsBuf(cellsToSchedule, schedulingTask));
+                        continueCallback:() => ScheduleCellsBuf(cellsToSchedule, schedulingTask));
                     return;
                 }
 
@@ -126,10 +133,14 @@ namespace Scheduler.Menu.Calendar
         private void ScheduleCellsBuf(List<CalendarCell> cellsToSchedule, TaskPlane schedulingTask)
         {
             if (cellsToSchedule.Count == 0) return;
-            var scheduledCellPlain = Instantiate(scheduledCellPlanePrefab, transform);
-            scheduledCellPlain.CommonAlpha = CommonScheduledPlaneAlpha;
-            scheduledCellPlain.HoveredAlpha = HoveredScheduledPlaneAlpha;
-            scheduledCellPlain.ScheduleCells(cellsToSchedule, schedulingTask);
+            var scheduledCellsMark = Instantiate(scheduledCellsMarkPrefab, transform);
+            scheduledCellsMark.CommonAlpha = CommonScheduledPlaneAlpha;
+            scheduledCellsMark.HoveredAlpha = HoveredScheduledPlaneAlpha;
+            scheduledCellsMark.MarkCellsScheduled(cellsToSchedule, this, schedulingTask);
+            Parent.RegisterScheduledMark(scheduledCellsMark);
+            scheduledCellsMark.onUnmarked.AddListener(mark => Parent.RemoveScheduledMark(mark));
+            scheduledCellsMark.onUnmarked.AddListener(_ => onCellsUnscheduled.Invoke(scheduledCellsMark));
+            onNewCellsScheduled.Invoke(scheduledCellsMark);
         }
     }
 }

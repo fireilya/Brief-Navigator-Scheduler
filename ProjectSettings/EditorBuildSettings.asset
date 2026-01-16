@@ -15,7 +15,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Scheduler.unity
     guid: 7aacf60ac056af14db493392d3d87cfc
   - enabled: 1
-    path: Assets/Scenes/ExitScene.unity
+    path: Assets/Scenes/FinishScene.unity
     guid: b2947b6f8d582ef48a3c759ae243c157
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}

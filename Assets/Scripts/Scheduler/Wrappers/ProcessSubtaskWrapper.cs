@@ -1,5 +1,6 @@
 using System;
 using Domain.Scheduler;
+using UnityEngine;
 
 namespace Scheduler.Wrappers
 {
@@ -13,11 +14,23 @@ namespace Scheduler.Wrappers
 
         public override string SubtaskToolInfo => $"Коэффициент: {ProcessSubtask.GetWorkToolCoeff(ChosenToolId):F1}";
 
-        public override void Do(float efficiencyCoeff, bool isLastTaskCell)
+        public override void PrecalculateSubtaskProgress(float workerEfficiencyCoeff, bool isLastTaskCell)
         {
-            ProcessSubtask.Progress += (int)(ProcessSubtask.GetToolEfficiency(ChosenToolId) * efficiencyCoeff);
+            var taskProgress = (int)(ProcessSubtask.GetWithToolEfficiency(ChosenToolId) * workerEfficiencyCoeff);
+            if (Subtask.TryGetWorkConstraint(out var maxCanBeDone))
+            {
+                if (taskProgress > maxCanBeDone) taskProgress = maxCanBeDone;
+            }
+            ProcessSubtask.CurrentDayProgress += taskProgress;
+            PrecalculatedProgress += taskProgress;
+            Debug.Log($"{Subtask.Name}: Progress raised to {Subtask.CurrentDayProgress}");
         }
 
-        public override int SubtaskEfficiency => ProcessSubtask.GetToolEfficiency(ChosenToolId);
+        public override int CalculateReferenceProgress(int scheduledOnHours)
+        {
+            return SubtaskEfficiency * scheduledOnHours;
+        }
+
+        public override int SubtaskEfficiency => ProcessSubtask.GetWithToolEfficiency(ChosenToolId);
     }
 }

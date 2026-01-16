@@ -1,12 +1,16 @@
 ﻿using Domain.Scheduler;
 using Scheduler.Menu.Notebook;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Scheduler.Menu
 {
     public class NotebookMenu : MenuBase
     {
         [SerializeField] private MapDataMapper mapper;
+        [SerializeField] private TimeFlowController timeFlowController;
+        public TimeFlowController TimeFlowController => timeFlowController;
+
         public Location SelectedLocation => mapper.CurrentChosenLocation?.LocationData;
         public GameTask SelectedTask { get; set; } = null;
         public Subtask SelectedSubtask { get; set; } = null;
@@ -14,6 +18,7 @@ namespace Scheduler.Menu
         private NotebookSubcanvas[] _childrens;
 
         private int state = 0;
+        
 
         protected override void Awake()
         {
@@ -24,6 +29,7 @@ namespace Scheduler.Menu
 
         public override void Open()
         {
+            if (!mapper.IsLocationSelected) return;
             base.Open();
             Init();
         }

@@ -12,10 +12,20 @@ namespace Shared
     {
         private static ActionArea[] _actionAreas;
         private static Tool[] _tools;
+        private static Neutralizer[] _neutralizers;
         private static Worker[] _workers;
 
         private static Guid GetToolIdByName(string toolName)
-            => _tools.Single(x => x.Name == toolName).Id;
+            => _tools.Single(x => string.Equals(
+                x.Name,
+                toolName,
+                StringComparison.CurrentCultureIgnoreCase)).Id;
+
+        private static Guid GetNeutralizerIdByName(string neutralizerName)
+            => _neutralizers.Single(x => string.Equals(
+                x.Name,
+                neutralizerName,
+                StringComparison.CurrentCultureIgnoreCase)).Id;
 
         public static void Init()
         {
@@ -30,10 +40,17 @@ namespace Shared
                 new Tool(Guid.NewGuid(), DataContainer.QuestId, "Тачка", "Tools/Wheelbarrow"),
             };
 
+            _neutralizers = new[]
+            {
+                new Neutralizer(Guid.NewGuid(), "Ботинки", "Equipment/Boots"),
+                new Neutralizer(Guid.NewGuid(), "Плащ", "Equipment/Cape"),
+                new Neutralizer(Guid.NewGuid(), "Шляпа", "Equipment/Hat")
+            };
+
             _workers = new[]
             {
-                new Worker(Guid.NewGuid(), "Фермер", "Workers/Farmer", 1.0),
-                new Worker(Guid.NewGuid(), "Сын фермера", "Workers/FarmerSon", 0.8)
+                new Worker(Guid.NewGuid(), "Фермер", "Workers/Farmer", 1.0f),
+                new Worker(Guid.NewGuid(), "Сын фермера", "Workers/FarmerSon", 0.8f)
             };
 
             _actionAreas = new[]
@@ -155,14 +172,13 @@ namespace Shared
                             },
                             new Risk(
                                 Guid.NewGuid(),
+                                "Дождь",
                                 "Risks/Rain",
-                                "It's rainy today",
-                                new Neutralizer(
-                                    Guid.NewGuid(),
-                                    "Плащ",
-                                    "Equipment/Cape")),
+                                "Дождь мокрый и холодный",
+                                "Начался сильный ливень",
+                                "Работник промок до нитки.",
+                                GetNeutralizerIdByName("Плащ")),
                             0),
-
                         new Location(
                             Guid.NewGuid(),
                             "Огород",
@@ -316,14 +332,13 @@ namespace Shared
                             },
                             new Risk(
                                 Guid.NewGuid(),
+                                "Гравий",
                                 "Risks/Gravel",
-                                "Gravel is sharp",
-                                new Neutralizer(
-                                    Guid.NewGuid(),
-                                    "Ботинки",
-                                    "Equipment/Boots")),
+                                "Гравий довольно острый",
+                                "Ваш работник наступил на острый камень",
+                                "Работник слегка повредил ногу.",
+                                GetNeutralizerIdByName("Ботинки")),
                             1),
-
                         new Location(
                             Guid.NewGuid(),
                             "Теплицы",
@@ -393,7 +408,7 @@ namespace Shared
                                             }
                                         )
                                     },
-                                    true),
+                                    false),
 
                                 new GameTask(
                                     Guid.NewGuid(),
@@ -430,12 +445,12 @@ namespace Shared
                             },
                             new Risk(
                                 Guid.NewGuid(),
+                                "Солнце",
                                 "Risks/Sun",
-                                "Sun is so hot!",
-                                new Neutralizer(
-                                    Guid.NewGuid(),
-                                    "Шляпа",
-                                    "Equipment/Hat")),
+                                "Солнце очень горячее!",
+                                "Облака разошлись и на небе выглянуло жаркое солнце",
+                                "Работник получил солнечный удар.",
+                                GetNeutralizerIdByName("Шляпа")),
                             2),
                     })
             };
@@ -462,6 +477,9 @@ namespace Shared
             GetToolIdByName("Ящик"),
             GetToolIdByName("Тачка")
         };
+
+        public static Neutralizer GetNeutralizer(Guid neutralizerId) =>
+            _neutralizers.FirstOrDefault(x => x.Id == neutralizerId);
 
 
         public static Tool[] GetAllToolsForQuest(Guid questId) => _tools.Where(x => x.QuestId == questId).ToArray();

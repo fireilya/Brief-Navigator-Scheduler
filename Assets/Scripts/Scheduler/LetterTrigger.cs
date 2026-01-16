@@ -1,11 +1,26 @@
 using System;
+using Scheduler;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 
 public class LetterTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    [SerializeField] private Canvas Letter;
+    [SerializeField] private MyUnityTimer timerPrefab;
+    [SerializeField] private double showLetterInSeconds = .25;
+    [SerializeField] private LetterDataMapper Letter;
+    
+    private MyUnityTimer _timer;
+
+    private void Awake()
+    {
+        _timer = Instantiate(timerPrefab, transform);
+        _timer.OnFinish.AddListener(() =>
+        {
+            Letter.gameObject.SetActive(true);
+            Letter.RemapData();
+        });
+    }
 
     private void Start()
     {
@@ -14,11 +29,16 @@ public class LetterTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Letter.gameObject.SetActive(true);
+        _timer.StartTimer(showLetterInSeconds);
     }
 
     public void OnPointerExit(PointerEventData eventData)
-    { 
-        Letter.gameObject.SetActive(false);
+    {
+        if (_timer.IsRunning) _timer.StopTimer();
+        else
+        {
+            Letter.Clear();
+            Letter.gameObject.SetActive(false); 
+        }
     }
 }

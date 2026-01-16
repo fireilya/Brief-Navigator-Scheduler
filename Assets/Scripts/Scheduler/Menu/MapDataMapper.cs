@@ -20,10 +20,9 @@ namespace Scheduler.Menu
     
         private LocationUI[] _locationUIElements;
         private List<Sprite> _loadedSprites =  new();
-
-        private LocationUI _currentChosenLocationUI = null;
         
-        public LocationUI CurrentChosenLocation => _currentChosenLocationUI; 
+        public LocationUI CurrentChosenLocation { get; private set; } 
+        public bool IsLocationSelected => CurrentChosenLocation;
         
         private void Awake()
         {
@@ -56,23 +55,23 @@ namespace Scheduler.Menu
         void OnLocationUIClicked(LocationUI locationUI, Location locationData)
         {
             var isDeselect = false;
-            if (_currentChosenLocationUI is not null)
+            if (CurrentChosenLocation is not null)
             {
-                isDeselect = _currentChosenLocationUI == locationUI;
-                _currentChosenLocationUI.IsSelected = false;
-                var locationButtonColors = _currentChosenLocationUI.LocationButton.colors;
+                isDeselect = CurrentChosenLocation == locationUI;
+                CurrentChosenLocation.IsSelected = false;
+                var locationButtonColors = CurrentChosenLocation.LocationButton.colors;
                 locationButtonColors.normalColor = commonColor;
-                _currentChosenLocationUI.LocationButton.colors = locationButtonColors;
-                _currentChosenLocationUI = null;
+                CurrentChosenLocation.LocationButton.colors = locationButtonColors;
+                CurrentChosenLocation = null;
             }
 
             if (!isDeselect)
             {
-                _currentChosenLocationUI = locationUI;
-                _currentChosenLocationUI.IsSelected = true;
-                var buttonColors=  _currentChosenLocationUI.LocationButton.colors;
+                CurrentChosenLocation = locationUI;
+                CurrentChosenLocation.IsSelected = true;
+                var buttonColors=  CurrentChosenLocation.LocationButton.colors;
                 buttonColors.normalColor = selectedColor;
-                _currentChosenLocationUI.LocationButton.colors = buttonColors;   
+                CurrentChosenLocation.LocationButton.colors = buttonColors;   
             }
             
             UpdateChosenData();
@@ -81,19 +80,22 @@ namespace Scheduler.Menu
         private static string BuildLocationTasksMessage(Location location)
         {
             var sb = new StringBuilder();
+            sb.Append("Задачи:\n");
             foreach (var task in DataContainer.ChosenTasksByLocation[location.Id]) sb.Append($"--{task.Name}\n");
+            sb.Append("\nРиски:\n");
+            sb.Append($"--{location.Risk.Name}");
             return sb.ToString();
         }
 
         private void UpdateChosenData()
         {
-            locationName.text = _currentChosenLocationUI is null
+            locationName.text = CurrentChosenLocation is null
                 ? "Не выбрано"
-                : _currentChosenLocationUI.LocationData.Name;
+                : CurrentChosenLocation.LocationData.Name;
             
-            locationTasks.text = _currentChosenLocationUI is null
+            locationTasks.text = CurrentChosenLocation is null
                 ? ""
-                : BuildLocationTasksMessage(_currentChosenLocationUI.LocationData);
+                : BuildLocationTasksMessage(CurrentChosenLocation.LocationData);
         }
     
         // Update is called once per frame

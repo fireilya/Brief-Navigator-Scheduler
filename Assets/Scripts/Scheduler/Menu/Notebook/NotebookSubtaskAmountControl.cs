@@ -56,6 +56,7 @@ public class NotebookSubtaskAmountControl : MonoBehaviour
 
     public virtual void UpdateWorkInfoLabels()
     {
+        if (SubtaskWrapper == null) return;
         subtaskEfficiencyText.text = $"{SubtaskWrapper.SubtaskEfficiency} шт/час";
         workHoursAmountText.text = WorkHours.ToString();
         totalAmountText.text = (SubtaskWrapper.SubtaskEfficiency * WorkHours).ToString();

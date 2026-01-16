@@ -1,5 +1,6 @@
 using System;
 using Domain.Scheduler;
+using UnityEngine;
 
 namespace Scheduler.Wrappers
 {
@@ -16,7 +17,7 @@ namespace Scheduler.Wrappers
 
         public override string SubtaskToolInfo => $"Вместительность: {SubtaskCapacity}";
 
-        public override void Do(float efficiencyCoeff, bool isLastTaskCell)
+        public override void PrecalculateSubtaskProgress(float workerEfficiencyCoeff, bool isLastTaskCell)
         {
             var currentToolCapacity = CapacitySubtask.GetToolCapacity(ChosenToolId);
             if (_currentToolFullness == currentToolCapacity || isLastTaskCell)
@@ -25,11 +26,43 @@ namespace Scheduler.Wrappers
                 return;
             }
 
-            var taskProgress = (int)(CapacitySubtask.GetEfficiency * efficiencyCoeff);
-            if (_currentToolFullness + taskProgress >= currentToolCapacity)
+            var taskProgress = (int)(CapacitySubtask.GetEfficiency * workerEfficiencyCoeff);
+            
+            if (Subtask.TryGetWorkConstraint(out var maxCanBeDone))
+            {
+                if (taskProgress > maxCanBeDone) taskProgress = maxCanBeDone;
+            }
+            
+            if (_currentToolFullness + taskProgress > currentToolCapacity)
                 taskProgress = currentToolCapacity - _currentToolFullness;
-            CapacitySubtask.Progress += taskProgress;
+            
+            Subtask.CurrentDayProgress += taskProgress;
             _currentToolFullness += taskProgress;
+            PrecalculatedProgress += taskProgress;
+            Debug.Log($"{Subtask.Name}: Progress raised to {Subtask.CurrentDayProgress}");
+        }
+
+        public override int CalculateReferenceProgress(int scheduledOnHours)
+        {
+            var chosenToolCapacity = CapacitySubtask.GetToolCapacity(ChosenToolId);
+            var currentToolFullness = 0;
+            var referenceProgress = 0;
+
+            for (var i = 0; i < scheduledOnHours; i++)
+            {
+                if (currentToolFullness == chosenToolCapacity || i == scheduledOnHours - 1) 
+                {
+                    currentToolFullness = 0;
+                    continue;
+                }
+                
+                var taskProgress = currentToolFullness + SubtaskEfficiency > chosenToolCapacity
+                    ? chosenToolCapacity - currentToolFullness
+                    : SubtaskEfficiency;
+                referenceProgress += taskProgress;
+                currentToolFullness += taskProgress;
+            }
+            return referenceProgress;
         }
 
         public override int SubtaskEfficiency => CapacitySubtask.GetEfficiency;

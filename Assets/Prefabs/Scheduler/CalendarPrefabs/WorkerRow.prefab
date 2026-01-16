@@ -265,4 +265,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellPrefab: {fileID: 6212211736176662845, guid: 1751d6e62f9d3ba4f8c6bf7682509924, type: 3}
-  scheduledCellPlanePrefab: {fileID: 3665526483132452871, guid: 12825b9f2b79c624ea3cd53c53e4a341, type: 3}
+  scheduledCellsMarkPrefab: {fileID: 3665526483132452871, guid: 12825b9f2b79c624ea3cd53c53e4a341, type: 3}
+  onNewCellScheduled:
+    m_PersistentCalls:
+      m_Calls: []

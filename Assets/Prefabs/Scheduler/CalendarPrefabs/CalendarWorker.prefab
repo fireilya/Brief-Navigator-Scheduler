@@ -88,3 +88,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c084c77a84b0af747909597ae8cd3106, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hintPlanePrefab: {fileID: 1802740589666311889, guid: e5977ef476489d9459c62d14c47e87ba, type: 3}
+  timerPrefab: {fileID: 2780719161901824345, guid: 26a8249cf60e5e1459b27f3e3481b207, type: 3}
+  showHintInSeconds: 0.5
