@@ -14,5 +14,5 @@ public class OpenMenuButton : MonoBehaviour
         _button.onClick.AddListener(Open);
     }
 
-    private void Open() => menu.Open();
+    protected virtual void Open() => menu.Open();
 }

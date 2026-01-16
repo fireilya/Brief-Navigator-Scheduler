@@ -65,8 +65,9 @@ namespace Scheduler.Menu.Notebook
                 _currentSubtaskAmountControl.UpdateWorkInfoLabels();
             });
 
-            _toolSlot.OnDetached.AddListener(_ =>
+            _toolSlot.onDetached.AddListener(_ =>
             {
+                if (_currentSubtaskAmountControl.SubtaskWrapper == null) return;
                 _currentSubtaskAmountControl.SubtaskWrapper.ResetChosenTool();
                 _toolSlot.SetSlotLabel(_currentSubtaskAmountControl.SubtaskWrapper.SubtaskToolInfo);
                 _currentSubtaskAmountControl.UpdateWorkInfoLabels();
@@ -74,13 +75,14 @@ namespace Scheduler.Menu.Notebook
 
             _equipmentSlot.OnEquipmentAttached.AddListener(equipment =>
             {
-                _currentSubtaskAmountControl.SubtaskWrapper.RiskNeutralizer = equipment.Equipment;
+                _currentSubtaskAmountControl.SubtaskWrapper.ChosenNeutralizerId = equipment.Equipment.Id;
                 _equipmentSlot.SetSlotLabel(equipment.Equipment.Name);
             });
 
-            _equipmentSlot.OnDetached.AddListener(_ =>
+            _equipmentSlot.onDetached.AddListener(_ =>
             {
-                _currentSubtaskAmountControl.SubtaskWrapper.RiskNeutralizer = null;
+                if (_currentSubtaskAmountControl.SubtaskWrapper == null) return;
+                _currentSubtaskAmountControl.SubtaskWrapper.ResetChosenNeutralizer();
                 _equipmentSlot.ClearSlotLabel();
             });
         }
@@ -89,6 +91,7 @@ namespace Scheduler.Menu.Notebook
         {
             base.Enable(withReinit);
             _toolSlot.SetSlotLabel(_currentSubtaskAmountControl.SubtaskWrapper.SubtaskToolInfo);
+            _equipmentSlot.ClearSlotLabel();
         }
 
         public override void Disable()
@@ -100,9 +103,10 @@ namespace Scheduler.Menu.Notebook
 
         private void ClearSlotsAndAmountController()
         {
+            _currentSubtaskAmountControl?.Clear();
             if (_toolSlot.HasAttach) _toolsMenu.ReturnItem(_toolSlot.Detach());
             if (_equipmentSlot.HasAttach) _equipmentMenu.ReturnItem(_equipmentSlot.Detach());
-            _currentSubtaskAmountControl?.Clear();
+            
         }
 
         protected override void Clear()
@@ -119,7 +123,7 @@ namespace Scheduler.Menu.Notebook
 
             processSubtaskAmountControl.gameObject.SetActive(false);
             capacitySubtaskAmountControl.gameObject.SetActive(false);
-            
+
             _currentSubtaskAmountControl = ParentNotebook.SelectedSubtask.IsUseCapacityTool
                 ? capacitySubtaskAmountControl
                 : processSubtaskAmountControl;
@@ -134,13 +138,14 @@ namespace Scheduler.Menu.Notebook
 
             subtaskHeader.text = ParentNotebook.SelectedSubtask.Name;
             _currentSubtaskAmountControl.UpdateWorkInfoLabels();
-            
+
             var relevantTools = ParentNotebook.SelectedSubtask.IsUseCapacityTool
                 ? DataContainer.FoundToolsIds.Where(x => DBServerMock.GetAllCapacityToolId.Contains(x))
                 : DataContainer.FoundToolsIds.Where(x => !DBServerMock.GetAllCapacityToolId.Contains(x));
-            
+
             foreach (var toolId in relevantTools) _toolsMenu.CreateItem(DBServerMock.GetTool(toolId));
-            foreach (var neutralizer in DataContainer.FoundRisksNeutralizers) _equipmentMenu.CreateItem(neutralizer);
+            foreach (var neutralizerId in DataContainer.FoundRisksNeutralizerIds) 
+                _equipmentMenu.CreateItem(DBServerMock.GetNeutralizer(neutralizerId));
         }
     }
 }

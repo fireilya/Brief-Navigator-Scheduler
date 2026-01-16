@@ -31,11 +31,12 @@ namespace DataFlowDemo.Navigator
             foreach (var location in DataContainer.CurrentActionArea.Locations)
             {
                 var newChooseElement = Instantiate(chooseElementPrefab, gridLayoutGroup.transform);
-                newChooseElement.ChooseNote.text = location.Risk.Neutralizer.Name;
+                var neutralizer = DBServerMock.GetNeutralizer(location.Risk.NeutralizerID);
+                newChooseElement.ChooseNote.text = neutralizer.Name;
                 newChooseElement.Toggle.onValueChanged.AddListener(value =>
                 {
-                    if (value) DataContainer.FoundRisksNeutralizers.Add(location.Risk.Neutralizer);
-                    else DataContainer.FoundRisksNeutralizers.Remove(location.Risk.Neutralizer);
+                    if (value) DataContainer.FoundRisksNeutralizerIds.Add(location.Risk.NeutralizerID);
+                    else DataContainer.FoundRisksNeutralizerIds.Remove(location.Risk.NeutralizerID);
                 });
                 _chooseElements.Add(newChooseElement);
 

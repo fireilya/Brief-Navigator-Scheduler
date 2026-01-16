@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Scheduler.Bases
@@ -15,10 +16,10 @@ namespace Scheduler.Bases
         public bool HasAttach => AttachedItem;
 
         [HideInInspector]
-        public UnityEvent<DraggableMenuItemBase> OnAttached = new();
+        public UnityEvent<DraggableMenuItemBase> onAttached = new();
         
         [HideInInspector]
-        public UnityEvent<DraggableMenuItemBase> OnDetached = new();
+        public UnityEvent<DraggableMenuItemBase> onDetached = new();
 
         protected virtual void Awake()
         {
@@ -40,7 +41,7 @@ namespace Scheduler.Bases
             item.RectTransform.position = RectTransform.position;
             item.RectTransform.sizeDelta = RectTransform.sizeDelta * PlacedObjectRelativeScaleRatio;
             AttachedItem = item;
-            OnAttached.Invoke(item);
+            onAttached.Invoke(item);
         }
 
         public virtual DraggableMenuItemBase Detach()
@@ -49,7 +50,7 @@ namespace Scheduler.Bases
             var item = AttachedItem;
             AttachedItem = null;
             item.AttachedTo = null;
-            OnDetached.Invoke(item);
+            onDetached.Invoke(item);
             return item;
         }
     }

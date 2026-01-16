@@ -42,7 +42,7 @@ namespace Scheduler.Menu.Notebook
                     ParentNotebook.SelectedSubtask = subtask;
                     ParentNotebook.Next();
                 });
-                subtaskVariant.SubtaskProgress.text = $"{subtask.Progress}/{subtask.Parent!.Target}";
+                subtaskVariant.SubtaskProgress.text = $"{subtask.DoneProgress}/{subtask.GameTask!.Target}";
                 CreatedObjects.Add(subtaskVariant.gameObject);
             }
         }
