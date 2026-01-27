@@ -121,7 +121,7 @@ namespace Scheduler
                     CalendarGrid.ShowErrorWindow(
                         $"Подзадача \"{mark.SubtaskWrapper.SubtaskName}\" не может быть выполнена " +
                         "вследствие отсутствия доступных заготовок, производимых в родительской задаче. " +
-                        $"\"{mark.SubtaskWrapper.Subtask.ParentSubtask?.Name}\"" +
+                        $"\"{mark.SubtaskWrapper.Subtask.ParentSubtask?.Name}\" " +
                         $"Задача будет распланирована.",
                         () => mark.UnmarkScheduledCells(true));
                 }
