@@ -28,7 +28,7 @@ namespace Scheduler
             nextDayButton.ButtonText.SetText("Закончить день");
             UpdateDayInfoLabel();
         }
-        
+
         public CalendarGrid CalendarGrid
         {
             get => _calendarGrid;
@@ -51,31 +51,32 @@ namespace Scheduler
         private void ConvertNextDayButtonToFinishButton()
         {
             nextDayButton.Button.onClick.RemoveAllListeners();
-            
+
             nextDayButton.Button.onClick.AddListener(() =>
             {
                 if (CalendarGrid) StartCoroutine(ProcessCalendarGrid(true));
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             });
-            
+
             nextDayButton.ButtonText.SetText("Завершить квест");
         }
 
         private IEnumerator ProcessCalendarGrid(bool isLoadNextSceneAfterProcess)
         {
             foreach (var mark in CalendarGrid.GetAllScheduledSubtaskMarks()
-                         .OrderBy(x=>x.StartsFromIndex)
-                         .ThenBy(x=>x.SubtaskOrder))
+                         .OrderBy(x => x.StartsFromIndex)
+                         .ThenBy(x => x.SubtaskOrder))
             {
                 mark.ApplyRiskInfluence();
                 if (mark.RiskMark.IsHappened) yield return ShowRiskInfoWindow(mark);
             }
+
             RecalculateCellsDayProgress();
             foreach (var scheduledSubtask in CalendarGrid.ScheduledSubtasks) scheduledSubtask.ApplyDayProgress();
             CalendarGrid.ClearAllScheduledSubtaskMarks();
             if (isLoadNextSceneAfterProcess) SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
-        
+
         private IEnumerator ShowRiskInfoWindow(ScheduledCellsMark mark)
         {
             var infoWindow = Instantiate(userInfoWindowPrefab, mainCanvas.transform);
@@ -90,7 +91,7 @@ namespace Scheduler
         {
             daysInfoLabel.SetText($"День {CurrentDay}/{questDaysCount}");
         }
-        
+
 
         public void RecalculateCellsDayProgress()
         {
@@ -103,9 +104,10 @@ namespace Scheduler
                     if (workerRow.Cells[i].IsScheduled) hourCellsBuf.AddLast(workerRow.Cells[i]);
                 }
 
-                foreach (var cell in hourCellsBuf.OrderBy(c => c.ScheduledByMark.SubtaskOrder)) 
+                foreach (var cell in hourCellsBuf.OrderBy(c => c.ScheduledByMark.SubtaskOrder))
                     cell.ScheduledByMark.PrecalculateCellProgress(cell);
             }
+
             VerifyScheduledMarks();
         }
 
@@ -119,6 +121,7 @@ namespace Scheduler
                     CalendarGrid.ShowErrorWindow(
                         $"Подзадача \"{mark.SubtaskWrapper.SubtaskName}\" не может быть выполнена " +
                         "вследствие отсутствия доступных заготовок, производимых в родительской задаче. " +
+                        $"\"{mark.SubtaskWrapper.Subtask.ParentSubtask?.Name}\"" +
                         $"Задача будет распланирована.",
                         () => mark.UnmarkScheduledCells(true));
                 }

@@ -21,9 +21,11 @@ public class FinishUI : MonoBehaviour
 
     private void CreateResultMessage()
     {
-        var allTasks = DataContainer.CurrentActionArea.GetAllTasks();
-        var trueTasks = allTasks.Where(x => x.IsTrue).ToArray();
-        var donePercent = (int)((float)trueTasks.Count(x => x.IsDone) / trueTasks.Length * 100);
-        resultMessage.SetText($"Квест \"Фермер\" выполнен на {donePercent}%");
+        var donePercent = DataContainer.CurrentActionArea.GetAllTasks()
+            .Where(x => x.IsTrue)
+            .Select(t => t.DoneFraction)
+            .Average() * 100;
+        
+        resultMessage.SetText($"Квест \"Фермер\" выполнен на {donePercent:F2}%");
     }
 }
